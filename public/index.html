@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="notesApp">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="style.css">
+    <script src="angular.min.js"></script>
+    <script src="myAng.js"></script>
+</head>
+<body ng-controller="notesController">
+<table>
+    <tr ng-repeat="note in notes">
+        <td class="note"> {{note.text}}, {{note._id}}</td>
+        <td>
+            <button ng-click="remove(note._id)">Remove</button>
+        </td>
+        <td>
+            <button ng-click="up(note._id)">Up</button>
+        </td>
+    </tr>
+</table>
+
+add note: <br>
+<textarea rows="10" cols="50" ng-model="text"></textarea>
+<button ng-click="add()">add note</button><br>
+<button ng-click="removeAll()">Remove all</button>
+</body>
+</html>
