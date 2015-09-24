@@ -2,13 +2,15 @@
 <html lang="en">
 
 <head>
-    <script src="angular.min.js"></script>
-    <script src="myAng.js"></script>
+    <script src="angular.js"></script>
+    <script src="angular-route.min.js"></script>
+    <script src="routes/route.js"></script>
+    <script src="routes/notes/SectionController.js"></script>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <title></title>
 </head>
-<body ng-app="sectionsApp" ng-controller="sectionController">
+<body ng-app="sectionsApp" ng-controller="SectionController">
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -43,7 +45,8 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container" >
+
     <div class="row">
         <div class="col-md-8">
             <div class="panel panel-default">
@@ -83,10 +86,11 @@
                 <span class="input-group-btn">
                     <button class="btn btn-default"
                             type="button"
-                            ng-click="addSection()">Add</button>
+                            ng-click="addSection()">Add
+                    </button>
                 </span>
             </div>
-            <div >
+            <div>
                 <input class="form-control" ng-model="sectionsFilter" placeholder="Filter">
             </div>
 
@@ -102,8 +106,8 @@
                 </li>
             </ul>
         </div>
-
     </div>
+
 </div>
 </body>
 </html>
