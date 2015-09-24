@@ -1,28 +1,54 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="notesApp">
+<html lang="en">
+
 <head>
+    <script src="angular.js"></script>
+    <script src="angular-route.min.js"></script>
+    <script src="routes/route.js"></script>
+    <script src="routes/notes/notes.js"></script>
+    <script src="routes/viewSection/viewSection.js"></script>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <title></title>
-    <link rel="stylesheet" href="style.css">
-    <script src="angular.min.js"></script>
-    <script src="routes/notes/SectionController.js"></script>
 </head>
-<body ng-controller="notesController">
-<table>
-    <tr ng-repeat="note in notes">
-        <td class="note"> {{note.text}}, {{note._id}}</td>
-        <td>
-            <button ng-click="remove(note._id)">Remove</button>
-        </td>
-        <td>
-            <button ng-click="up(note._id)">Up</button>
-        </td>
-    </tr>
-</table>
+<body ng-app="sectionsApp">
 
-add note: <br>
-<textarea rows="10" cols="50" ng-model="text"></textarea>
-<button ng-click="add()">add note</button><br>
-<button ng-click="removeAll()">Remove all</button>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <div class="navbar-brand">Notes tutorial app</div>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <form class="navbar-form navbar-right">
+                <div class="form-group">
+                    <input type="text" placeholder="Username" class="form-control">
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Password" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-success">Sign in</button>
+            </form>
+        </div>
+        <!--/.navbar-collapse -->
+    </div>
+</nav>
+
+<div class="jumbotron">
+    <div class="container">
+        <h2>
+            <span class="glyphicon glyphicon-edit"></span>
+            Keep your notes in order
+        </h2>
+
+        <p>
+            A simple application to keep your own notes in order.
+        </p>
+    </div>
+</div>
+
+<div class="container" ng-view>
+
+
+</div>
 </body>
 </html>
