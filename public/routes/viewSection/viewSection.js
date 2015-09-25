@@ -1,4 +1,4 @@
-module.controller("ViewSectionController", function ($scope, $http, $routeParams, $log) {
+controllers.ViewSectionController = function ($scope, $http, $routeParams, $log) {
     $scope.section = $routeParams.name;
     var params = {params: {section: $scope.section}};
     $log.log("view controller.get(" + params + ")");
@@ -9,4 +9,4 @@ module.controller("ViewSectionController", function ($scope, $http, $routeParams
         .error(function (err) {
             $log.log("viewcontroller error " + err);
         })
-});
+};

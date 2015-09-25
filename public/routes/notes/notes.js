@@ -1,8 +1,9 @@
 "use strict";
-module.controller("NotesController", function ($scope, $http, $log, $routeParams, $location) {
+
+controllers.NotesController = function ($scope, $http, $log, $routeParams, $location) {
     $scope.notes = [];
     $scope.activeSection = $routeParams.section;
-    var readSections = function () {
+    function readSections() {
         $http.get("/sections")
             .success(function (res) {
                 if (res) {
@@ -19,7 +20,7 @@ module.controller("NotesController", function ($scope, $http, $log, $routeParams
             .error(function (err) {
                 $log.log("get sections error: " + err);
             })
-    };
+    }
     if (!$scope.sections) {
         readSections();
     }
@@ -42,7 +43,7 @@ module.controller("NotesController", function ($scope, $http, $log, $routeParams
         update();
     };
 
-    var update = function () {
+    function update() {
         var params = {params: {section: $scope.activeSection}};
         $http.get("/notes", params)
             .success(function (res) {
@@ -52,7 +53,7 @@ module.controller("NotesController", function ($scope, $http, $log, $routeParams
             .error(function (err) {
                 $log.log("error on get notes: " + err);
             })
-    };
+    }
 
     $scope.addSection = function () {
         if ($scope.newSection) {
@@ -67,4 +68,4 @@ module.controller("NotesController", function ($scope, $http, $log, $routeParams
             $scope.newSection = null;
         }
     };
-});
+};

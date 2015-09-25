@@ -4,6 +4,7 @@
 'use strict';
 
 var module = angular.module("sectionsApp", ['ngRoute']);
+var controllers = {};
 module.config(['$routeProvider',
     function ($routeProvider) {
         console.log("redirecting");
@@ -12,9 +13,14 @@ module.config(['$routeProvider',
                 templateUrl:'routes/viewSection/viewSection.html',
                 controller:'ViewSectionController'
             })
+            .when("/register", {
+                templateUrl: 'routes/userForm/userForm.html',
+                controller: "UserFormController"
+            })
             .when('/:section?', {
                 templateUrl: 'routes/notes/notes.html',
                 controller: 'NotesController'
             })
             .otherwise({redirectTo: '/'});
     }]);
+module.controller(controllers);
