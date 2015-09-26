@@ -25,6 +25,9 @@ db.open(function () {
     db.collection("users", function (err, users) {
         db.users = users;
     });
+    db.collection("countries", function (err, countries) {
+        db.countries = countries;
+    });
 });
 
 app.use(express.static(path.join(__dirname, "public")));
@@ -137,4 +140,9 @@ app.post('/user', function (req, res) {
             res.end();
         }
     );
+});
+app.get("/countries", function (req, res) {
+    db.countries.find({}, {name: 1, _id: 0}).toArray(function (err, items) {
+        res.send(items);
+    })
 });

@@ -7,7 +7,15 @@ controllers.UserFormController = function ($scope, $location, $http) {
                 $location.path('/');
             });
 
+    };
+    function loadCountries() {
+        $http.get("/countries")
+            .success(function (res) {
+                $scope.countries = res;
+                console.log(JSON.stringify(res));
+            })
     }
+    loadCountries();
 
 };
 module.directive("matchTo", function () {
@@ -62,7 +70,7 @@ module.directive("allowedAge", function () {
         },
         link: function (scope, element, attributes, model) {
             console.log("allowed age: " + scope.allowedAge);
-            console.log("watched: " + JSON.stringify(attributes.ngModel) + " " );
+            console.log("watched: " + JSON.stringify(attributes.ngModel) + " ");
 
             scope.$watch("$parent." + attributes.ngModel, function (value) {
                 console.log("adult check");
@@ -72,7 +80,7 @@ module.directive("allowedAge", function () {
 
                     var age = new Date(millis).getFullYear() - 1970;
                     var adult = age > scope.allowedAge;
-                    console.log("adult: " + adult +", age " +age);
+                    console.log("adult: " + adult + ", age " + age);
                     model.$setValidity('adult', adult);
                 }
             });

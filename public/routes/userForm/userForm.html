@@ -66,6 +66,16 @@
                     minimal allowed age is 12
                 </span>
             </div>
+            <div class="form-group">
+                <label class="" for="country">Country</label>
+                <select class="dropdown"
+                        name="country"
+                        id="country"
+                        ng-model="user.country"
+                        ng-options="country.name for country in countries"
+                        >
+                </select>
+            </div>
             <button type="submit"
                     class="btn btn-primary"
                     ng-disabled="userForm.$invalid"
