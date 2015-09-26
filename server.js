@@ -22,6 +22,9 @@ db.open(function () {
     db.collection("sections", function (err, sections) {
         db.sections = sections;
     });
+    db.collection("users", function (err, users) {
+        db.users = users;
+    });
 });
 
 app.use(express.static(path.join(__dirname, "public")));
@@ -107,6 +110,31 @@ app.get("/sections", function (req, res) {
     });
 });
 app.post("/sections", function (req, res) {
-   db.sections.insert(req.body);
+    db.sections.insert(req.body);
     res.end();
+});
+
+app.put("/section/:id", function (req, res) {
+    db.sections.update({_id: new ObjectID(req.params.id)}, {$set: req.body});
+    res.end();
+});
+
+app.get("/isUserUnique", function (req, res) {
+    console.log("check user: " + JSON.stringify(req.query));
+    db.users.findOne(req.query, function (err, user) {
+        if (user) {
+            res.send(false);
+        } else {
+            res.send(true);
+        }
+    });
+});
+
+app.post('/user', function (req, res) {
+    console.log("insert user: " + JSON.stringify(req.body));
+    db.users.insertOne(req.body)
+        .then(function () {
+            res.end();
+        }
+    );
 });

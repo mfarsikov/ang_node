@@ -1,0 +1,77 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">User registration form</div>
+
+
+    <form class="css-form" name="userForm" novalidate>
+        <div class="panel-body">
+            <div class="form-group">
+                <label for="userName">User name</label>
+                <input type="text"
+                       class="form-control"
+                       id="userName"
+                       name="userName"
+                       placeholder="Enter your name"
+                       ng-model="user.name"
+                       unique-user>
+                <span ng-show="userForm.userName.$dirty && userForm.userName.$error.unique">user already exist</span>
+
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password"
+                       class="form-control"
+                       id="password"
+                       name="password"
+                       placeholder="Password"
+                       ng-model="user.password"
+                        > <br>
+                <input type="password"
+                       class="form-control"
+                       id="password2"
+                       name="password2"
+                       placeholder="Repeat password"
+                       ng-model="user.password2"
+                       match-to="user.password">
+                <span ng-hide="userForm.password2.$valid">Paswords do not match</span>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="user.subscribe">
+                    Subscribe for news
+                </label>
+            </div>
+            <div class="form-group" ng-show="user.subscribe">
+                <label for="email">Email</label>
+                <input type="email"
+                       class="form-control"
+                       id="email"
+                       name="email"
+                       placeholder="Email"
+                       ng-model="user.email"
+                       required="required">
+            <span ng-show="userForm.email.$invalid">
+                incorrect email
+            </span>
+            </div>
+            <div class="form-group">
+                <label for="birthDate">Birth date</label>
+                <input type="date"
+                       class="form-control"
+                       id="birthDate"
+                       name="birthDate"
+                       placeholder="Birth date"
+                       ng-model="user.birthDate"
+                       allowed-age="12">
+                <span ng-show="userForm.birthDate.$dirty && userForm.birthDate.$error.adult">
+                    minimal allowed age is 12
+                </span>
+            </div>
+            <button type="submit"
+                    class="btn btn-primary"
+                    ng-disabled="userForm.$invalid"
+                    ng-click="createUser()">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>

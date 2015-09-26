@@ -49,7 +49,7 @@
             <li href="#"
                 class="list-group-item"
                 dnd-draggable="section"
-                dnd-moved=""
+                dnd-moved="sections.splice($index,1);sectionMoved();"
                 ng-repeat="section in sections | filter: sectionsFilter"
                 ng-click="showSection(section)"
                 ng-class="{active: section.text==activeSection}">

@@ -3,7 +3,7 @@
  */
 'use strict';
 
-var module = angular.module("sectionsApp", ['ngRoute']);
+var module = angular.module("sectionsApp", ['ngRoute','dndLists']);
 var controllers = {};
 module.config(['$routeProvider',
     function ($routeProvider) {
