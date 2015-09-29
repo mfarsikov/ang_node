@@ -66,7 +66,8 @@ controllers.NotesController = function ($scope, $http, $log, $routeParams, $loca
     $scope.addSection = function () {
         if ($scope.newSection) {
             $http.post("/sections", {
-                text: $scope.newSection
+                text: $scope.newSection,
+                order: $scope.sections.length
             })
                 .success(function (res) {
                     $log.log("section created");

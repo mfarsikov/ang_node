@@ -71,19 +71,24 @@ app.get("/notes", function (req, res) {
 });
 
 app.post("/notes", function (req, res) {
-    if (req.session.userName == undefined) {
+    if (!loggedIn(req)) {
         res.sendStatus(403);
         console.log("post notes:" + JSON.stringify(req.body) + " unauthorised");
         return;
     }
 
-    console.log("insert: " + req.body);
-    db.notes.insertOne(req.body);
+    console.log("insert: " + JSON.stringify(req.body));
+    var note = {};
+    note.text = req.body.text;
+    note.user = req.session.userName;
+    note.section = req.body.section;
+
+    db.notes.insertOne(note);
     res.end();
 });
 
 app.delete("/notes", function (req, res) {
-    if (req.session.userName == undefined) {
+    if (!loggedIn(req)) {
         res.sendStatus(403);
         console.log("delete notes: " + JSON.stringify(req.query) + ". unauthorised");
         return;
@@ -101,7 +106,7 @@ app.delete("/notes", function (req, res) {
 });
 
 app.put("/notes", function (req, res) {
-    if (req.session.userName == undefined) {
+    if (!loggedIn(req)) {
         res.sendStatus(403);
         console.log("put notes: " + JSON.stringify(req.body) + ". unauthorised");
         return;
@@ -145,18 +150,23 @@ app.get("/sections", function (req, res) {
 });
 
 app.post("/sections", function (req, res) {
-    if (req.session.userName == undefined) {
+    if (!loggedIn(req)) {
         res.sendStatus(403);
         console.log("post sections:" + JSON.stringify(req.body) + " unauthorised");
         return;
     }
 
-    db.sections.insert(req.body);
+    var section = {};
+    section.text = req.body.text;
+    section.order = req.body.order;
+    section.user = req.session.userName
+
+    db.sections.insert(section);
     res.end();
 });
 
 app.put("/section/:id", function (req, res) {
-    if (req.session.userName == undefined) {
+    if (!loggedIn(req)) {
         res.sendStatus(403);
         console.log("put sections:" + JSON.stringify(req.query) + " unauthorised");
         return;
@@ -201,11 +211,29 @@ app.get("/cities", function (req, res) {
 
 app.post("/login", function (req, res) {
 
-    db.users.find({
-        name: req.body.login,
-        password: req.body.password
-    })
-        .toArray(function (err, arr) {
-            res.send(arr.length > 0);
-        });
+    if (loggedIn(req)) {
+        res.send(true);
+    } else {
+        db.users.find({
+            name: req.body.login,
+            password: req.body.password
+        })
+            .toArray(function (err, arr) {
+                if (arr.length > 0) {
+                    req.session.userName = req.body.login;
+                    res.send(true);
+                } else {
+                    res.send(false);
+                }
+            });
+    }
 });
+
+app.post("/logout", function (req, res) {
+    req.session.destroy();
+    res.end();
+});
+
+function loggedIn(req) {
+    return req.session.userName != undefined;
+}
