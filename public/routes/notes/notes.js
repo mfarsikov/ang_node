@@ -7,10 +7,8 @@ controllers.NotesController = function ($scope, $http, $log, $routeParams, $loca
         $http.get("/sections")
             .success(function (res) {
                 if (res) {
-                    res.sort(function (section1, section2) {
-                        return section1.order - section2.order;
-                    });
                     $scope.sections = res;
+                    sortSections();
                 } else {
                     $scope.sections = [];
                 }
@@ -30,13 +28,16 @@ controllers.NotesController = function ($scope, $http, $log, $routeParams, $loca
     }
 
     $scope.addNote = function () {
-        $http.post("/notes", {section: $scope.activeSection, text: $scope.text})
+        $http.post("/notes", {
+            section: $scope.activeSection,
+            text: $scope.text
+        })
             .success(function (res) {
                 $log.log("note added");
                 update();
             })
             .error(function (err) {
-                $log.logError("error during note add " + err);
+                $log.error("error during note add " + err);
             });
     };
 
@@ -47,7 +48,11 @@ controllers.NotesController = function ($scope, $http, $log, $routeParams, $loca
     };
 
     function update() {
-        var params = {params: {section: $scope.activeSection}};
+        var params = {
+            params: {
+                section: $scope.activeSection
+            }
+        };
         $http.get("/notes", params)
             .success(function (res) {
                 $log.log("loaded " + res.length + " notes");
@@ -60,7 +65,9 @@ controllers.NotesController = function ($scope, $http, $log, $routeParams, $loca
 
     $scope.addSection = function () {
         if ($scope.newSection) {
-            $http.post("/sections", {text: $scope.newSection})
+            $http.post("/sections", {
+                text: $scope.newSection
+            })
                 .success(function (res) {
                     $log.log("section created");
                     readSections();
@@ -76,16 +83,26 @@ controllers.NotesController = function ($scope, $http, $log, $routeParams, $loca
         $scope.sections
             .forEach(function (section, index) {
                 if (section.order != index) {
-                    section.order = index;
-                    $http.put('/section/' + section._id, {order: section.order})
+
+                    $http.put('/section/' + section._id, {order: index})
+                        .success(function (res) {
+                            section.order = index;
+                        })
                         .error(function (err) {
-                            $log.log("error during updating section order: " + err );
+                            $log.log("error during updating section order: " + err);
+                            sortSections()
                         });
 
                 }
             });
 
     };
-
+    function sortSections() {
+        if ($scope.sections) {
+            $scope.sections.sort(function (section1, section2) {
+                return section1.order - section2.order;
+            });
+        }
+    }
 
 };

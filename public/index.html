@@ -9,6 +9,9 @@
     <script src="routes/notes/notes.js"></script>
     <script src="routes/viewSection/viewSection.js"></script>
     <script src="routes/userForm/userForm.js"></script>
+    <script src="routes/login/userService.js"></script>
+    <script src="routes/login/loginController.js"></script>
+
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <title></title>
@@ -20,15 +23,17 @@
         <div class="navbar-header">
             <div class="navbar-brand">Notes tutorial app</div>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <form class="navbar-form navbar-right">
+        <div id="navbar" class="navbar-collapse collapse"
+             ng-controller="LoginController"
+             >
+            <form class="navbar-form navbar-right" ng-hide="loggedId">
                 <div class="form-group">
-                    <input type="text" placeholder="Username" class="form-control">
+                    <input type="text" placeholder="Username" class="form-control" ng-model="userName" >
                 </div>
                 <div class="form-group">
-                    <input type="password" placeholder="Password" class="form-control">
+                    <input type="password" placeholder="Password" class="form-control" ng-model="password" >
                 </div>
-                <button type="submit" class="btn btn-success">Sign in</button>
+                <button type="submit" class="btn btn-success" ng-click="login()">Sign in</button>
                 <a class="btn btn-primary" ng-href="#/register">Register</a>
             </form>
         </div>

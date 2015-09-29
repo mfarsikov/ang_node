@@ -73,7 +73,15 @@
                         id="country"
                         ng-model="user.country"
                         ng-options="country.name for country in countries"
-                        >
+                        ng-change="countryChanged()">
+                </select>
+                <label class="" for="city">City</label>
+                <select class="dropdown"
+                        name="city"
+                        id="city"
+                        ng-model="user.city"
+                        ng-options="city.name for city in cities"
+                        ng-disabled="!(user.country)">
                 </select>
             </div>
             <button type="submit"

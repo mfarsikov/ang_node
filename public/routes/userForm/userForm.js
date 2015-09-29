@@ -15,7 +15,20 @@ controllers.UserFormController = function ($scope, $location, $http) {
                 console.log(JSON.stringify(res));
             })
     }
+
     loadCountries();
+
+    $scope.countryChanged = function () {
+        console.log("country changed to " + JSON.stringify($scope.user.country));
+        $http.get("/cities", {
+            params: {
+                country: $scope.user.country.name
+            }
+        })
+            .success(function (res) {
+                $scope.cities = res;
+            });
+    };
 
 };
 module.directive("matchTo", function () {

@@ -28,6 +28,9 @@ db.open(function () {
     db.collection("countries", function (err, countries) {
         db.countries = countries;
     });
+    db.collection("cities", function (err, cities) {
+        db.cities = cities;
+    });
 });
 
 app.use(express.static(path.join(__dirname, "public")));
@@ -50,7 +53,12 @@ app.use(session({
 app.listen(3000);
 
 app.get("/notes", function (req, res) {
-    console.log("get notes request: " + req.query);
+    var userName = req.session.userName ? req.session.userName : 'demo';
+
+    req.query.user = userName;
+
+    console.log("get notes request: " + JSON.stringify(req.query));
+
     db.notes.find(req.query).toArray(function (err, items) {
         if (err) {
             console.log("error " + err);
@@ -63,12 +71,24 @@ app.get("/notes", function (req, res) {
 });
 
 app.post("/notes", function (req, res) {
+    if (req.session.userName == undefined) {
+        res.sendStatus(403);
+        console.log("post notes:" + JSON.stringify(req.body) + " unauthorised");
+        return;
+    }
+
     console.log("insert: " + req.body);
     db.notes.insertOne(req.body);
     res.end();
 });
 
 app.delete("/notes", function (req, res) {
+    if (req.session.userName == undefined) {
+        res.sendStatus(403);
+        console.log("delete notes: " + JSON.stringify(req.query) + ". unauthorised");
+        return;
+    }
+
     if (req.query.id) {
         var id = new ObjectID(req.query.id);
         db.notes.remove({_id: id}, function (err) {
@@ -81,6 +101,12 @@ app.delete("/notes", function (req, res) {
 });
 
 app.put("/notes", function (req, res) {
+    if (req.session.userName == undefined) {
+        res.sendStatus(403);
+        console.log("put notes: " + JSON.stringify(req.body) + ". unauthorised");
+        return;
+    }
+
     db.notes.find().toArray(function (err, items) {
         var id = req.body.id;
         var note = items.filter(function (note) {
@@ -103,7 +129,12 @@ app.put("/notes", function (req, res) {
 });
 
 app.get("/sections", function (req, res) {
-    db.sections.find().toArray(function (err, items) {
+
+    var userName = req.session.userName ? req.session.userName : 'demo';
+    req.query.user = userName;
+
+    console.log("get sections: " + JSON.stringify(req.query));
+    db.sections.find(req.query).toArray(function (err, items) {
         if (err) {
             console.log("error on get sections: " + err);
             res.end();
@@ -112,12 +143,24 @@ app.get("/sections", function (req, res) {
         res.send(items);
     });
 });
+
 app.post("/sections", function (req, res) {
+    if (req.session.userName == undefined) {
+        res.sendStatus(403);
+        console.log("post sections:" + JSON.stringify(req.body) + " unauthorised");
+        return;
+    }
+
     db.sections.insert(req.body);
     res.end();
 });
 
 app.put("/section/:id", function (req, res) {
+    if (req.session.userName == undefined) {
+        res.sendStatus(403);
+        console.log("put sections:" + JSON.stringify(req.query) + " unauthorised");
+        return;
+    }
     db.sections.update({_id: new ObjectID(req.params.id)}, {$set: req.body});
     res.end();
 });
@@ -141,8 +184,28 @@ app.post('/user', function (req, res) {
         }
     );
 });
+
 app.get("/countries", function (req, res) {
     db.countries.find({}, {name: 1, _id: 0}).toArray(function (err, items) {
         res.send(items);
     })
+});
+
+app.get("/cities", function (req, res) {
+    console.log(JSON.stringify(req.query));
+    db.cities.find(req.query, {name: 1, _id: 0})
+        .toArray(function (err, arr) {
+            res.send(arr);
+        });
+});
+
+app.post("/login", function (req, res) {
+
+    db.users.find({
+        name: req.body.login,
+        password: req.body.password
+    })
+        .toArray(function (err, arr) {
+            res.send(arr.length > 0);
+        });
 });
